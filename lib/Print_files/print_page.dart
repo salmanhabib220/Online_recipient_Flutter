@@ -1,4 +1,3 @@
-
 import 'package:bluetooth_print/bluetooth_print.dart';
 import 'package:bluetooth_print/bluetooth_print_model.dart';
 import 'package:flutter/material.dart';
@@ -9,21 +8,22 @@ class PrintPage extends StatefulWidget {
 }
 
 class _PrintPageState extends State<PrintPage> {
-  BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
+  static BluetoothPrint bluetoothPrint = BluetoothPrint.instance;
   List<BluetoothDevice> _devices = [];
   String _devicesMsg = "";
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => {initPrinter()});
+    WidgetsBinding.instance!
+        .addPostFrameCallback((context) => initPrinter());
   }
 
- void initPrinter() async {
+  Future<void> initPrinter() async {
     bluetoothPrint.startScan(timeout: Duration(seconds: 4));
 
     bluetoothPrint.scanResults.listen(
-      (val) {
+      (val) async {
         if (!mounted) return;
         setState(() => {_devices = val});
         if (_devices.isEmpty)
@@ -33,7 +33,7 @@ class _PrintPageState extends State<PrintPage> {
       },
     );
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +61,7 @@ class _PrintPageState extends State<PrintPage> {
     );
   }
 
-  void _startPrint(BluetoothDevice device) async {
+  Future<void> _startPrint(BluetoothDevice device) async {
     // ignore: unnecessary_null_comparison
     if (device != null && device.address != null) {
       await bluetoothPrint.connect(device);
