@@ -11,8 +11,8 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   String name = "";
   bool changeButton = false;
-  // String _emial = "";
-  // String _pass = "";
+  String _emial = "";
+  String _pass = "";
   final _formKey = GlobalKey<FormState>();
 
   moveToHome(BuildContext context) async {
@@ -92,7 +92,7 @@ class _SignupPageState extends State<SignupPage> {
                     },
                     onChanged: (value) {
                       setState(() {
-                        //   _emial = value;
+                        _emial = value;
                       });
                     },
                   ),
@@ -113,7 +113,7 @@ class _SignupPageState extends State<SignupPage> {
                     },
                     onChanged: (value) {
                       setState(() {
-                        //   _pass = value;
+                         _pass = value;
                       });
                     },
                   ),

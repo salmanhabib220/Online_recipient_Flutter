@@ -78,6 +78,7 @@ class _PrintPageState extends State<PrintPage> {
           align: LineText.ALIGN_CENTER,
           linefeed: 1,
         ),
+        
       );
     }
   }

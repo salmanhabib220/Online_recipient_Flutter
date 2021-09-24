@@ -1,6 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:project_no1/Listofproduct/Design_product.dart';
+import 'package:project_no1/Pages/loginPage.dart';
 
 class Splashscreen extends StatefulWidget {
   Splashscreen({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class _SplashscreenState extends State<Splashscreen> {
         splash:  Image.asset(
           "images/undraw_logistics_x4dc.png"
           ),
-          nextScreen: Designproduct(),
+          nextScreen: LoginPage(),
           splashTransition: SplashTransition.scaleTransition,
           duration: 3500,
       ),

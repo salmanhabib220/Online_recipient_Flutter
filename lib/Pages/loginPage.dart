@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_no1/Pages/signupPage.dart';
 import 'package:project_no1/utils/routes.dart';
@@ -10,15 +11,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-    String name = "";
-    bool changeButton = false;
-    // String _email = "";
-    // String _pass = "";
-    final _formKey = GlobalKey<FormState>();
+  String name = "";
+  bool changeButton = false;
+  TextEditingController _emailcontroller = TextEditingController();
+  TextEditingController _passwordcontroller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String _email = "";
+  String _pass = "";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-moveToHome(BuildContext context) async {
-    
-    if (_formKey.currentState!.validate()) {
+  moveToHome(BuildContext context) async {
+    UserCredential result =
+        await _auth.signInWithEmailAndPassword(email: _email, password: _pass);
+
+    if (_formKey.currentState!.validate() && result != null) {
       setState(() {
         changeButton = true;
       });
@@ -63,7 +69,9 @@ moveToHome(BuildContext context) async {
                       vertical: 16.0, horizontal: 32.0),
                   child: Column(
                     children: [
+                      //Email Field
                       TextFormField(
+                        controller: _emailcontroller,
                         decoration: InputDecoration(
                           hintText: "Enter Email",
                           labelText: "Email",
@@ -77,11 +85,14 @@ moveToHome(BuildContext context) async {
                         onChanged: (value) {
                           name = value;
                           setState(() {
-                       //     _email = value;
+                            _email = value;
                           });
                         },
                       ),
+
+                      //Password Field
                       TextFormField(
+                        controller: _passwordcontroller,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: "Enter password",
@@ -97,7 +108,7 @@ moveToHome(BuildContext context) async {
                         },
                         onChanged: (value) {
                           setState(() {
-                      //      _pass = value;
+                            _pass = value;
                           });
                         },
                       ),

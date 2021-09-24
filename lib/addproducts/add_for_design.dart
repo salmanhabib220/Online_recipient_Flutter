@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class AddProduct extends StatefulWidget {
-  const AddProduct({Key? key}) : super(key: key);
+class AddDesign extends StatefulWidget {
+  const AddDesign({Key? key}) : super(key: key);
 
   @override
-  _AddProductState createState() => _AddProductState();
+  _AddDesignState createState() => _AddDesignState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _AddDesignState extends State<AddDesign> {
   @override
   Widget build(BuildContext context) {
   TextStyle? textStyle = Theme.of(context).textTheme.bodyText1;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add New Products"),
+        title: Text("Add Designs"),
         elevation: 10,
         backgroundColor: Colors.deepPurple,
       ),

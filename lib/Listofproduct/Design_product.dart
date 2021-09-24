@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project_no1/Pages/addproduct.dart';
 import 'package:project_no1/Print_files/Print_details_list.dart';
+import 'package:project_no1/addproducts/add_for_design.dart';
 import 'package:project_no1/models/dummy_listview.dart';
 
 class Designproduct extends StatefulWidget {
@@ -74,7 +74,7 @@ class _DesignproductState extends State<Designproduct> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return AddProduct();
+            return AddDesign();
           }));
         },
         elevation: 5,
