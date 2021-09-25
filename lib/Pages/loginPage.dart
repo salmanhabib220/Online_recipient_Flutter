@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_no1/Pages/signupPage.dart';
@@ -19,25 +21,34 @@ class _LoginPageState extends State<LoginPage> {
   String _email = "";
   String _pass = "";
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String pattern = r'\w+@\w+\.\W+';
+  String errorMessage = "";
 
   moveToHome(BuildContext context) async {
     UserCredential result =
         await _auth.signInWithEmailAndPassword(email: _email, password: _pass);
 
     if (_formKey.currentState!.validate() && result != null) {
-      setState(() {
-        changeButton = true;
-      });
-      await Future.delayed(Duration(seconds: 1));
-      await Navigator.pushNamed(context, MyRoutes.homePage);
-      setState(() {
-        changeButton = false;
-      });
+      try {
+        setState(() {
+          changeButton = true;
+        });
+        await Future.delayed(Duration(seconds: 1));
+        await Navigator.pushNamed(context, MyRoutes.homePage);
+        setState(() {
+          changeButton = false;
+        });
+        errorMessage = '';
+      } on FirebaseAuthException catch (error) {
+        errorMessage = error.message!;
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    RegExp regex = RegExp(pattern);
     return Material(
         color: Colors.white,
         child: SingleChildScrollView(
@@ -80,6 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                           if (value!.isEmpty) {
                             return "Email cannot be empty";
                           }
+                          if (!regex.hasMatch(value)) {
+                            return "Invalid Email Address";
+                          }
                           return null;
                         },
                         onChanged: (value) {
@@ -111,6 +125,9 @@ class _LoginPageState extends State<LoginPage> {
                             _pass = value;
                           });
                         },
+                      ),
+                      Center(
+                        child: Text(errorMessage),
                       ),
                       SizedBox(
                         height: 40.0,

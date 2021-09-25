@@ -1,3 +1,6 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_no1/Pages/loginPage.dart';
 
@@ -14,15 +17,25 @@ class _SignupPageState extends State<SignupPage> {
   String _emial = "";
   String _pass = "";
   final _formKey = GlobalKey<FormState>();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String pattern = r'\w+@\w+\.\W+';
+  String errorMessage = "";
 
   moveToHome(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        changeButton = true;
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return LoginPage();
-        }));
-      });
+    UserCredential result = await _auth.createUserWithEmailAndPassword(
+        email: _emial, password: _pass);
+    if (_formKey.currentState!.validate() && result != null) {
+      try {
+        setState(() {
+          changeButton = true;
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return LoginPage();
+          }));
+        });
+        errorMessage = " ";
+      } on FirebaseAuthException catch (error) {
+        errorMessage = error.message!;
+      }
       setState(() {
         changeButton = false;
       });
@@ -31,6 +44,8 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
+    RegExp regex = RegExp(pattern);
     return Material(
         child: SingleChildScrollView(
       child: Form(
@@ -86,8 +101,12 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Username cannot be empty";
+                        return "Email cannot be empty";
                       }
+                      if (!regex.hasMatch(value)) {
+                        return "Invalid Email Address";
+                      }
+
                       return null;
                     },
                     onChanged: (value) {
@@ -113,9 +132,12 @@ class _SignupPageState extends State<SignupPage> {
                     },
                     onChanged: (value) {
                       setState(() {
-                         _pass = value;
+                        _pass = value;
                       });
                     },
+                  ),
+                  Center(
+                    child: Text(errorMessage),
                   ),
                   SizedBox(
                     height: 40.0,
